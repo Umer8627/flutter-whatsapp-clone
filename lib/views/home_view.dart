@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:whatsapp_clone/constants/theme_constant.dart';
+import 'package:whatsapp_clone/repo/auth_repo.dart';
 import 'package:whatsapp_clone/state/user_state.dart';
 import 'package:whatsapp_clone/utills/snippets.dart';
 import 'package:whatsapp_clone/views/chat/chats_list_view.dart';
 import 'package:whatsapp_clone/views/contacts/contacts_view.dart';
 
 import '../constants/color_constant.dart';
+
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
@@ -16,7 +18,8 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
+class _HomeViewState extends State<HomeView>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   late TabController tabBarController;
   int _currentIndex = 0;
   late PageController pageController;
@@ -24,12 +27,28 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     tabBarController = TabController(length: 3, vsync: this);
-        pageController = PageController(initialPage: _currentIndex);
-
+    pageController = PageController(initialPage: _currentIndex);
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<UserState>(context, listen: false)
           .setUserModel(FirebaseAuth.instance.currentUser!.uid);
     });
+ 
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        AuthRepo.instance.setUserState(true);
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.paused:
+        AuthRepo.instance.setUserState(false);
+        break;
+    }
   }
 
   @override
@@ -58,15 +77,14 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
           indicatorWeight: 4,
           labelColor: tabColor,
           unselectedLabelColor: Colors.grey,
-          onTap: (index){
+          onTap: (index) {
             _currentIndex = index;
-        pageController.animateToPage(
+            pageController.animateToPage(
               index,
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
             );
           },
-          
           labelStyle:
               CustomFont.regularText.copyWith(fontWeight: FontWeight.w500),
           tabs: const [
@@ -91,7 +109,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       body: PageView(
         onPageChanged: (index) {
           _currentIndex = index;
-         
+
           tabBarController.animateTo(index);
         },
         controller: pageController,
@@ -114,5 +132,11 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
   }
 }

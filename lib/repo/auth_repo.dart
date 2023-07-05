@@ -67,7 +67,7 @@ class AuthRepo {
       if (firebaseAuth.currentUser?.phoneNumber != null) {
         String profilePic = await uploadImage(
             image: image,
-            name: firebaseAuth.currentUser?.uid??"",
+            name: firebaseAuth.currentUser?.uid ?? "",
             reference: profilePicRef);
         await firestore
             .collection('testing-users')
@@ -85,8 +85,6 @@ class AuthRepo {
     }
   }
 
-
-
   Future<UserModel?> getUserDetail(String id) async {
     return await firestore
         .collection('testing-users')
@@ -94,6 +92,15 @@ class AuthRepo {
         .get()
         .then((value) {
       return UserModel.fromMap(value.data()!);
+    });
+  }
+
+  void setUserState(bool isOnline) async {
+    await firestore
+        .collection('testing-users')
+        .doc(firebaseAuth.currentUser?.uid)
+        .update({
+      'isOnline': isOnline,
     });
   }
 }

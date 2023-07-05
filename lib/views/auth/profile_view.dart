@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:whatsapp_clone/constants/color_constant.dart';
 import 'package:whatsapp_clone/models/user_model.dart';
 import 'package:whatsapp_clone/repo/auth_repo.dart';
@@ -22,7 +23,7 @@ class _ProfileViewState extends State<ProfileView> {
   File? image;
 
   void selectImage() async {
-    image = await pickImageFromGallery(context);
+    image = await pickImage(context: context,imageSource: ImageSource.gallery);
     setState(() {});
   }
 

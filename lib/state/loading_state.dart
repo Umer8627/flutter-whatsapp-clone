@@ -6,7 +6,6 @@ class LoadingState extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   void setLoading(bool isLoading) {
-    debugPrint('isLoading: $isLoading');
     _isLoading = isLoading;
     notifyListeners();
   }

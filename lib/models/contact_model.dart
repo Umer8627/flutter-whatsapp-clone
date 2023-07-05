@@ -23,12 +23,24 @@ class ContactModel {
       'contactId': contactId,
       'timeSent': timeSent.millisecondsSinceEpoch,
       'lastMessage': lastMessage,
-      'isSenderIsCurrentUser': isSenderIsCurrentUser ,
+      'isSenderIsCurrentUser': isSenderIsCurrentUser,
       'lastMessageSentId': lastMessageSentId,
     };
   }
 
-  factory ContactModel.fromMap(Map<String, dynamic> map) {
+  Map<String, dynamic> toHive() {
+    return {
+      'name': name,
+      'profilePic': profilePic,
+      'contactId': contactId,
+      'timeSent': timeSent.millisecondsSinceEpoch,
+      'lastMessage': lastMessage,
+      'isSenderIsCurrentUser': isSenderIsCurrentUser,
+      'lastMessageSentId': lastMessageSentId,
+    };
+  }
+
+  factory ContactModel.fromMap(Map<dynamic, dynamic> map) {
     return ContactModel(
       name: map['name'] ?? '',
       profilePic: map['profilePic'] ?? '',
