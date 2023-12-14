@@ -1,14 +1,11 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 
 class UserModel {
   final String uid;
   final String name;
   final String profilePic;
   final String phone;
-  final bool isonline;
+  final bool isOnline;
   final String email;
   final List<String> groupId;
   UserModel({
@@ -16,7 +13,7 @@ class UserModel {
     required this.name,
     required this.profilePic,
     required this.phone,
-    required this.isonline,
+    required this.isOnline,
     required this.email,
     required this.groupId,
   });
@@ -28,7 +25,7 @@ class UserModel {
     String? name,
     String? profilePic,
     String? phone,
-    bool? isonline,
+    bool? isOnline,
     String? email,
     List<String>? groupId,
   }) {
@@ -37,7 +34,7 @@ class UserModel {
       name: name ?? this.name,
       profilePic: profilePic ?? this.profilePic,
       phone: phone ?? this.phone,
-      isonline: isonline ?? this.isonline,
+      isOnline: isOnline ?? this.isOnline,
       email: email ?? this.email,
       groupId: groupId ?? this.groupId,
     );
@@ -49,7 +46,7 @@ class UserModel {
       'name': name,
       'profilePic': profilePic,
       'phone': phone,
-      'isonline': isonline,
+      'isOnline': isOnline,
       'email': email,
       'groupId': groupId,
     };
@@ -61,43 +58,11 @@ class UserModel {
       name: map['name'] as String,
       profilePic: map['profilePic'] as String,
       phone: map['phone'] as String,
-      isonline: map['isonline'] as bool,
+      isOnline: map['isOnline'] as bool,
       email: map['email'] as String,
       groupId: List<String>.from(map['groupId']),
     );
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'UserModel(uid: $uid, name: $name, profilePic: $profilePic, phone: $phone, isonline: $isonline, email: $email, groupId: $groupId)';
-  }
-
-  @override
-  bool operator ==(covariant UserModel other) {
-    if (identical(this, other)) return true;
   
-    return 
-      other.uid == uid &&
-      other.name == name &&
-      other.profilePic == profilePic &&
-      other.phone == phone &&
-      other.isonline == isonline &&
-      other.email == email &&
-      listEquals(other.groupId, groupId);
-  }
-
-  @override
-  int get hashCode {
-    return uid.hashCode ^
-      name.hashCode ^
-      profilePic.hashCode ^
-      phone.hashCode ^
-      isonline.hashCode ^
-      email.hashCode ^
-      groupId.hashCode;
-  }
 }

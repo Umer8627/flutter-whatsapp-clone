@@ -21,6 +21,8 @@ void main() async {
   await Hive.openBox('messages');
   await Hive.openBox('users');
   await Hive.openBox('senderUser');
+
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => LoadingState()),

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:whatsapp_clone/models/user_model.dart';
@@ -16,7 +14,9 @@ class UserState extends ChangeNotifier {
     _userModel = await AuthRepo.instance.getUserDetail(id);
     senderModel = userModel;
     senderUser.put(_userModel!.uid, _userModel!.toMap());
-    print('sender user ${senderUser.values.first}');
+    if (kDebugMode) {
+      print('sender user ${senderUser.values.first}');
+    }
     notifyListeners();
   }
 }

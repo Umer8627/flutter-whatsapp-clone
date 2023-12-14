@@ -141,10 +141,7 @@ class ChatRepo {
     String? caption,
     BuildContext? context,
   }) async {
-    var seperateSession = await Hive.openBox(receiverUserId);
     var messageModel = Hive.box('messages');
-    var user = Hive.box('users');
-
     final message = Message(
         senderId: auth.currentUser!.uid,
         receiverId: receiverUserId,
@@ -159,9 +156,22 @@ class ChatRepo {
         isuploaded:
             Provider.of<InternetState>(context!, listen: false).isInternet);
 
-    messageModel.put(lastMessageSentId.toString(), message.toMap());
-    seperateSession.put(lastMessageSentId.toString(), message.toMap());
-    user.put(receiverUserModel!.uid, receiverUserModel.toMap());
+    Map<dynamic, dynamic> messagesList = messageModel.get('messagesList') ?? {};
+     log('Receiver id  ${messagesList.keys}');
+    if (!messagesList.containsKey(receiverUserId)) {
+      messagesList[receiverUserId] = [message.toMap()];
+    } else {
+      messagesList[receiverUserId] ??= [];
+      messagesList[receiverUserId]!.add(message.toMap());
+    }
+
+    messageModel.put('messagesList', messagesList);
+
+    // print('messagemodel ${messageModel.values}');
+
+    // messageModel.put(lastMessageSentId.toString(), message.toMap());
+    // seperateSession.put(lastMessageSentId.toString(), message.toMap());
+    // user.put(receiverUserModel!.uid, receiverUserModel.toMap());
 
     // users -> sender id -> reciever id -> messages -> message id -> store message
     await firestore
@@ -338,6 +348,12 @@ class ChatRepo {
     }
   }
 }
+
+
+/*
+
+
+*/ 
 
 
 /*

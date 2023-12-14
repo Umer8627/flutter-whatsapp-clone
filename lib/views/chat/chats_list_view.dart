@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:whatsapp_clone/constants/color_constant.dart';
@@ -10,7 +9,6 @@ import 'package:whatsapp_clone/models/contact_model.dart';
 import 'package:whatsapp_clone/models/user_model.dart';
 import 'package:whatsapp_clone/repo/auth_repo.dart';
 import 'package:whatsapp_clone/repo/chat_repo.dart';
-import 'package:whatsapp_clone/state/chat_state.dart';
 import 'package:whatsapp_clone/utills/snippets.dart';
 import 'package:whatsapp_clone/views/chat/chat_room.dart';
 
@@ -70,11 +68,11 @@ class _ChatListViewState extends State<ChatListView> {
                               elevation: 10,
                               child: InkWell(
                                 onTap: () async {
-                                  var user = Hive.box('users');
+                                  UserModel? model = await AuthRepo.instance
+                                      .getUserDetail(contact.contactId);
 
-                                  UserModel model = UserModel.fromMap(
-                                      user.get(contact.contactId));
-                                  push(context, ChatRoom(userModel: model));
+                                  if (!mounted) return;
+                                  push(context, ChatRoom(userModel: model!));
                                 },
                                 child: ListTile(
                                   leading: CircleAvatar(
@@ -192,15 +190,10 @@ class _ChatListViewState extends State<ChatListView> {
                         elevation: 10,
                         child: InkWell(
                           onTap: () async {
-                            // UserModel? model = await AuthRepo.instance
-                            //     .getUserDetail(contact.contactId);
-                            // if (!mounted) return;
-
-                            var user = Hive.box('users');
-
-                            UserModel model =
-                                UserModel.fromMap(user.get(contact.contactId));
-                            push(context, ChatRoom(userModel: model));
+                            UserModel? model = await AuthRepo.instance
+                                .getUserDetail(contact.contactId);
+                            if (!mounted) return;
+                             push(context, ChatRoom(userModel: model!));
                           },
                           child: ListTile(
                             leading:

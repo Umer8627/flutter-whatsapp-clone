@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:whatsapp_clone/repo/chat_repo.dart';
-import 'package:whatsapp_clone/utills/snippets.dart';
-
 import '../../../constants/color_constant.dart';
 import '../../../constants/theme_constant.dart';
 import '../../../models/user_model.dart';
@@ -60,7 +58,7 @@ class UserAppBar extends StatelessWidget implements PreferredSizeWidget {
                         .copyWith(fontWeight: FontWeight.w500, fontSize: 18),
                   ),
                   Text(
-                    userModel!.isonline ? 'Online' : 'Offline',
+                    userModel!.isOnline ? 'Online' : 'Offline',
                     style: CustomFont.lightText.copyWith(
                         fontWeight: FontWeight.w800,
                         color: tabColor,

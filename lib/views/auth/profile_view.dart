@@ -106,7 +106,7 @@ class _ProfileViewState extends State<ProfileView> {
                     }
                     try {
                       UserModel userModel = UserModel(
-                        isonline: true,
+                        isOnline: true,
                         phone: '',
                         profilePic: '',
                         uid: '',
